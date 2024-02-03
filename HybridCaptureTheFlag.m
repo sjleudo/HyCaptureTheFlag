@@ -98,7 +98,7 @@ for ti=1:TSPAN(2)/dt
             qi =  sprintf('q_%dR',i);
             etai =  sprintf('eta_%dR',i); 
             %%%%%%%% Tagging in blue zone
-            if pointInRectangle(RobotsB.(z)(ti,1:2),X_B) && RobotsB.(q)(ti) == 0 && RobotsB.(tau)(ti) >= 0 ...
+            if pointInRectangle(RobotsB.(z)(ti,1:2),X_B) && RobotsB.(q)(ti) == 0 && RobotsB.(tau)(ti) <= 0 ...
                     && pointInRectangle(RobotsR.(zi)(ti,1:2),X_B) && RobotsR.(qi)(ti) == 0 ...
                       && pointInCircle(RobotsR.(zi)(ti,1:2), RobotsB.(z)(ti,1:2), gc)
     
@@ -113,14 +113,14 @@ for ti=1:TSPAN(2)/dt
             end
             %%%%%%%% Tagged in red zone
             if (pointInRectangle(RobotsB.(z)(ti,1:2),X_R) && RobotsB.(q)(ti) == 0  ...
-                    && pointInRectangle(RobotsR.(zi)(ti,1:2),X_R) && RobotsR.(qi)(ti) == 0 && RobotsR.(taui)(ti) >= 0 ...
+                    && pointInRectangle(RobotsR.(zi)(ti,1:2),X_R) && RobotsR.(qi)(ti) == 0 && RobotsR.(taui)(ti) <= 0 ...
                       && pointInCircle(RobotsB.(z)(ti,1:2), RobotsR.(zi)(ti,1:2), gc)) ...
                || (not(pointInRectangle(RobotsB.(z)(ti,1:2),X)) && RobotsB.(q)(ti) == 0)  ... % Leaving X
                || (pointInCircle(RobotsB.(z)(ti,1:2),FB,gf) && RobotsB.(q)(ti) == 1)  % Reactivated
                     
                     % Tagged in red zone
                     if (pointInRectangle(RobotsB.(z)(ti,1:2),X_R) && RobotsB.(q)(ti) == 0  ...
-                    && pointInRectangle(RobotsR.(zi)(ti,1:2),X_R) && RobotsR.(qi)(ti) == 0 && RobotsR.(taui)(ti) >= 0 ...
+                    && pointInRectangle(RobotsR.(zi)(ti,1:2),X_R) && RobotsR.(qi)(ti) == 0 && RobotsR.(taui)(ti) <= 0 ...
                       && pointInCircle(RobotsB.(z)(ti,1:2), RobotsR.(zi)(ti,1:2), gc)) 
 
                         RobotsR.(taui)(ti) = Tagging_Ability(RobotsR.(taui)(ti),barT); % Jump in tagging ability 
@@ -137,7 +137,7 @@ for ti=1:TSPAN(2)/dt
             end
             %%%%%%%% First case accounted above: tagged in red zone w flag
             %if  (pointInRectangle(RobotsB.(z)(ti,1:2),X_R) && RobotsB.(q)(ti) == 0 && RobotsB.(eta)(ti) == 1  ...
-                 %   && pointInRectangle(RobotsR.(zi)(ti,1:2),X_B) && RobotsR.(qi)(ti) == 0 && RobotsR.(taui)(ti) >= 0 ...
+                 %   && pointInRectangle(RobotsR.(zi)(ti,1:2),X_B) && RobotsR.(qi)(ti) == 0 && RobotsR.(taui)(ti) <= 0 ...
                  %     && pointInCircle(RobotsB.(z)(ti,1:2), RobotsR.(zi)(ti,1:2), gc) && RobotsB.mu(ti) == 0) ||...
              if   (pointInCircle(RobotsB.(z)(ti,1:2),FR,gf) && RobotsB.(q)(ti) == 0 && RobotsB.(eta)(ti) == 0 && RobotsR.mu(ti) == 1) ... % Red flag captured 
                || (pointInCircle(RobotsB.(z)(ti,1:2),FB,gf) && RobotsB.(q)(ti) == 0 && RobotsB.(eta)(ti) == 1 && RobotsR.mu(ti) == 0) % Team B Scored
@@ -146,7 +146,7 @@ for ti=1:TSPAN(2)/dt
                 RobotsB.(eta)(ti) = 1 - RobotsB.(eta)(ti); % Jump in carrying the flag state
             end
             %%%%%%%% First case accounted above: tagged in blue zone w flag
-            %if (pointInRectangle(RobotsB.(z)(ti,1:2),X_B) && RobotsB.(q)(ti) == 0 && RobotsB.(tau)(ti) >= 0 ...
+            %if (pointInRectangle(RobotsB.(z)(ti,1:2),X_B) && RobotsB.(q)(ti) == 0 && RobotsB.(tau)(ti) <= 0 ...
              %       && pointInRectangle(RobotsR.(zi)(ti,1:2),X_B) && RobotsR.(qi)(ti) == 0 && RobotsR.(etai)(ti) == 1 ...
               %        && pointInCircle(RobotsR.(zi)(ti,1:2), RobotsB.(z)(ti,1:2), gc) && RobotsB.mu(ti) == 0) ||...
              if (pointInCircle(RobotsR.(zi)(ti,1:2),FB,gf) && RobotsR.(qi)(ti) == 0 && RobotsR.(etai)(ti) == 0 && RobotsB.mu(ti) == 1) ... % Blue flag captured 
@@ -165,7 +165,7 @@ for ti=1:TSPAN(2)/dt
         % Flow of robot:
             RobotsB.(z)(ti+1,1:3) = Robot_Dynamics(RobotsB.(z)(ti,1:3),[50,thetab],dt);  
         % Flow of logic variables:
-        RobotsB.(tau)(ti+1) = RobotsB.(tau)(ti) + dt;
+        RobotsB.(tau)(ti+1) = RobotsB.(tau)(ti) - dt;
         RobotsB.(q)(ti+1) = RobotsB.(q)(ti);
         RobotsB.(eta)(ti+1) = RobotsB.(eta)(ti);
     end
@@ -185,7 +185,7 @@ for ti=1:TSPAN(2)/dt
             qk =  sprintf('q_%dB',k);
             etak =  sprintf('eta_%dB',k); 
             %%%%%%%% Tagging in red zone
-%             if pointInRectangle(RobotsR.(z)(ti,1:2),X_R) && RobotsR.(q)(ti) == 0 && RobotsR.(tau)(ti) >= 0 ...
+%             if pointInRectangle(RobotsR.(z)(ti,1:2),X_R) && RobotsR.(q)(ti) == 0 && RobotsR.(tau)(ti) <= 0 ...
 %                     && pointInRectangle(RobotsB.(zk)(ti,1:2),X_R) && RobotsB.(qk)(ti) == 0 ...
 %                       && pointInCircle(RobotsB.(zk)(ti,1:2), RobotsR.(z)(ti,1:2), gc)
 %                 % Jump if carrying flag
@@ -198,14 +198,14 @@ for ti=1:TSPAN(2)/dt
 %             end
             %%%%%%%% Tagged in blue zone
             if (pointInRectangle(RobotsR.(z)(ti,1:2),X_B) && RobotsR.(q)(ti) == 0  ...
-                    && pointInRectangle(RobotsB.(zk)(ti,1:2),X_B) && RobotsB.(qk)(ti) == 0 && RobotsB.(tauk)(ti) >= 0 ...
+                    && pointInRectangle(RobotsB.(zk)(ti,1:2),X_B) && RobotsB.(qk)(ti) == 0 && RobotsB.(tauk)(ti) <= 0 ...
                       && pointInCircle(RobotsR.(z)(ti,1:2), RobotsB.(zk)(ti,1:2), gc)) ...
                || (not(pointInRectangle(RobotsR.(z)(ti,1:2),X)) && RobotsR.(q)(ti) == 0)  ... % Leaving X
                || (pointInCircle(RobotsR.(z)(ti,1:2),FR,gf) && RobotsR.(q)(ti) == 1)  % Reactivated
                     
                     % Tagged in blue zone
                     if (pointInRectangle(RobotsR.(z)(ti,1:2),X_B) && RobotsR.(q)(ti) == 0  ...
-                    && pointInRectangle(RobotsB.(zk)(ti,1:2),X_B) && RobotsB.(qk)(ti) == 0 && RobotsB.(tauk)(ti) >= 0 ...
+                    && pointInRectangle(RobotsB.(zk)(ti,1:2),X_B) && RobotsB.(qk)(ti) == 0 && RobotsB.(tauk)(ti) <= 0 ...
                       && pointInCircle(RobotsR.(z)(ti,1:2), RobotsB.(zk)(ti,1:2), gc)) 
 
                         RobotsB.(tauk)(ti) = Tagging_Ability(RobotsB.(tauk)(ti),barT); % Jump in tagging ability 
@@ -222,7 +222,7 @@ for ti=1:TSPAN(2)/dt
             end
             %%%%%%%% First case accounted above: tagged in blue zone w flag
             %if  (pointInRectangle(RobotsR.(z)(ti,1:2),X_B) && RobotsR.(q)(ti) == 0 && RobotsR.(eta)(ti) == 1  ...
-                 %   && pointInRectangle(RobotsB.(zk)(ti,1:2),X_R) && RobotsB.(qk)(ti) == 0 && RobotsB.(tauk)(ti) >= 0 ...
+                 %   && pointInRectangle(RobotsB.(zk)(ti,1:2),X_R) && RobotsB.(qk)(ti) == 0 && RobotsB.(tauk)(ti) <= 0 ...
                  %     && pointInCircle(RobotsR.(z)(ti,1:2), RobotsB.(zk)(ti,1:2), gc) && RobotsR.mu(ti) == 0) ||...
              if   (pointInCircle(RobotsR.(z)(ti,1:2),FB,gf) && RobotsR.(q)(ti) == 0 && RobotsR.(eta)(ti) == 0 && RobotsB.mu(ti) == 1) ... % Red flag captured 
                || (pointInCircle(RobotsR.(z)(ti,1:2),FR,gf) && RobotsR.(q)(ti) == 0 && RobotsR.(eta)(ti) == 1 && RobotsB.mu(ti) == 0) % Team R Scored
@@ -231,7 +231,7 @@ for ti=1:TSPAN(2)/dt
                 RobotsR.(eta)(ti) = 1 - RobotsR.(eta)(ti); % Jump in carrying the flag state
             end
             %%%%%%%% First case accounted above: tagged in red zone w flag
-            %if (pointInRectangle(RobotsR.(z)(ti,1:2),X_R) && RobotsR.(q)(ti) == 0 && RobotsR.(tau)(ti) >= 0 ...
+            %if (pointInRectangle(RobotsR.(z)(ti,1:2),X_R) && RobotsR.(q)(ti) == 0 && RobotsR.(tau)(ti) <= 0 ...
              %       && pointInRectangle(RobotsB.(zk)(ti,1:2),X_R) && RobotsB.(qk)(ti) == 0 && RobotsB.(etak)(ti) == 1 ...
               %        && pointInCircle(RobotsB.(zk)(ti,1:2), RobotsR.(z)(ti,1:2), gc) && RobotsR.mu(ti) == 0) ||...
              if (pointInCircle(RobotsB.(zk)(ti,1:2),FR,gf) && RobotsB.(qk)(ti) == 0 && RobotsB.(etak)(ti) == 0 && RobotsR.mu(ti) == 1) ... % Red flag captured 
@@ -251,7 +251,7 @@ for ti=1:TSPAN(2)/dt
         % Flow of robot:
         RobotsR.(z)(ti+1,1:3) = Robot_Dynamics(RobotsR.(z)(ti,1:3),[50,thetar],dt);  
         % Flow of logic variables:
-        RobotsR.(tau)(ti+1) = RobotsR.(tau)(ti) + dt;
+        RobotsR.(tau)(ti+1) = RobotsR.(tau)(ti) - dt;
         RobotsR.(q)(ti+1) = RobotsR.(q)(ti);
         RobotsR.(eta)(ti+1) = RobotsR.(eta)(ti);
     end
@@ -313,17 +313,17 @@ for ti=1:TSPAN(2)/(dt*5)
         %sprintf('addpoints(hz%dB,RobotsB.(Name)(ti,1),RobotsB.(Name)(ti,2))',k);
         %addpoints(h2,RobotsB.(Name)(ti,1),RobotsB.(Name)(ti,2));
         %addpoints(h22,[RobotsB.(Name)(ti,1) RobotsB.(Name)(ti,1)+6*cos(RobotsB.(Name)(ti,3))],[RobotsB.(Name)(ti,2) RobotsB.(Name)(ti,2)+6*sin(RobotsB.(Name)(ti,3))]);
-        if RobotsB.tau_1B(ti) < 0
+        if RobotsB.tau_1B(ti) > 0
             hz1B.Color='#77AC30';
         else
             hz1B.Color='blue';
         end
-        if sum(contains(fieldnames(RobotsB),'tau_2B')) && RobotsB.tau_2B(ti) < 0
+        if sum(contains(fieldnames(RobotsB),'tau_2B')) && RobotsB.tau_2B(ti) > 0
             hz2B.Color='#77AC30';
         else
             hz2B.Color='blue';
         end
-        if sum(contains(fieldnames(RobotsB),'tau_3B')) && RobotsB.tau_3B(ti) < 0
+        if sum(contains(fieldnames(RobotsB),'tau_3B')) && RobotsB.tau_3B(ti) > 0
             hz3B.Color='#77AC30';
         else
             hz3B.Color='blue';
@@ -374,17 +374,17 @@ for ti=1:TSPAN(2)/(dt*5)
         end
         drawnow
         
-        if RobotsR.tau_1R(ti) < 0
+        if RobotsR.tau_1R(ti) > 0
             hz1R.Color='#D95319';
         else
             hz1R.Color='red';
         end
-        if sum(contains(fieldnames(RobotsR),'tau_2R')) && RobotsR.tau_2R(ti) < 0
+        if sum(contains(fieldnames(RobotsR),'tau_2R')) && RobotsR.tau_2R(ti) > 0
             hz2R.Color='#D95319';
         else
             hz2R.Color='red';
         end
-        if sum(contains(fieldnames(RobotsR),'tau_3R')) && RobotsR.tau_3R(ti) < 0
+        if sum(contains(fieldnames(RobotsR),'tau_3R')) && RobotsR.tau_3R(ti) > 0
             hz3R.Color='#D95319';
         else
             hz3R.Color='red';
