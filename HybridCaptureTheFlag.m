@@ -51,7 +51,7 @@ for k=1:b
     eta =  sprintf('eta_%dB',k);
 
     RobotsB.(z)(1,1:3) = [FB(1)+ip*cos(-pi/2+k*pi/(b+1)),...
-                      FB(2)+ip*sin(-pi/2+k*pi/(b+1)),...
+                     FB(2)+ip*sin(-pi/2+k*pi/(b+1)),...
                       -pi/2+pi*rand(1)];
     
     RobotsB.(tau)(1) = 0; % Starts with tagging ability
@@ -79,7 +79,7 @@ for i=1:r
 end
     RobotsR.mu(1) = 1; % Flag in place
 % Simulation Horizon
-TSPAN = [0 50];     % Second entry is the maximum amount of seconds allowed
+TSPAN = [0 10];     % Second entry is the maximum amount of seconds allowed
 dt = 0.01;
 %
 % --------------------------------------------------------------
@@ -306,7 +306,7 @@ hz3R2 = animatedline('MaximumNumPoints',2,'Color','red','LineWidth',2);
 
 [A,map] = rgb2ind(frame2im(getframe),256);
 imwrite(A,map,'3.gif','LoopCount',65535,'DelayTime',0.01);
-for ti=1:TSPAN(2)/(dt*5)
+for ti=1:TSPAN(2)/(dt)
     %for k=1:b
         %Name =  sprintf('z_%dB',k);
         %sprintf('hz%dB = h2',k);
