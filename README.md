@@ -10,7 +10,7 @@ Author: Santiago Jimenez Leudo
 Revision: 0.0.0.1 Date: 01/22/2024 01:19:00
 https://github.com/sjimen28/HyCaptureTheFlag
 
-Requirements: Matlab (Developed in R2020b)
+Requirements: Matlab (Developed in R2022b)
 
 Content: (Download as a folder and add it to the Path in Matlab)
   - HybridCaptureTheFlag.m
